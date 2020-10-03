@@ -95,6 +95,7 @@ namespace mock_test.classes
             string qu = "UPDATE `paris_pub`.`employee` SET `password` = 'passie' WHERE (`employee_id` = '1');";
             string equ = "UPDATE `paris_pub`.`employee` SET `surname` = 'Strobel', `gender` = '0', `date_of_birth` = '1999-03-06', `password` = '123' WHERE(`employee_id` = '2')";
         }
+
         /*-----Stock-----*/
         public void InsertIntoStock(string prod_type, string prod_name, int in_stock, string date, decimal price_unit)
         {
@@ -130,7 +131,7 @@ namespace mock_test.classes
             ExecuteQuery(qu);
         }
 
-        /*-----Rights-----*/
+        /*----Rights----*/
         public void InsertIntoRights(int employee_id, short employees, short stocks, short orders, short trans, short admin)
         {
             string qu = "SELECT * FROM paris_pub.employee where `employee_id` = '" + employee_id + "';";
@@ -184,8 +185,19 @@ namespace mock_test.classes
             ExecuteQuery(qu);
         }
 
+        /*----Transaction Details----*/
+        public void InsertTransDetails(string trans_id, string stock_id, string amount_sold, string price)
+        {
+            string qu = "INSERT INTO `paris_pub`.`trans_details` (`transac_id`, `stock_id`, `amount_sold`, `price_at_date` ) VALUES ("
+                + trans_id + ", "
+                + stock_id + ", "
+                + amount_sold + ", +"
+                + price +") ;";
+            ExecuteQuery(qu);
+        }
+
         /*-----Non table specifics-----*/
-      /*Executes sql queries, any CUD commands. Read commands should
+        /*Executes sql queries, any CUD commands. Read commands should
          *   must be written in full code. The function for reading from
          *   the database is still WIP. See TO-DO List, or the 
          *   ExecuteRead(string qu) function*/
