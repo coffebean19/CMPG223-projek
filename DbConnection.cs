@@ -95,6 +95,26 @@ namespace mock_test.classes
             string qu = "UPDATE `paris_pub`.`employee` SET `password` = 'passie' WHERE (`employee_id` = '1');";
             string equ = "UPDATE `paris_pub`.`employee` SET `surname` = 'Strobel', `gender` = '0', `date_of_birth` = '1999-03-06', `password` = '123' WHERE(`employee_id` = '2')";
         }
+        public string[] ReadFromEmployees(int id)
+        {
+            string qu = "SELECT * FROM `paris_pub`.employee WHERE `employee_id` = '" + id + "';";
+            string[] ret = new string[7];
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(qu, Connection);
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ret[0] = reader[0].ToString();
+                ret[1] = reader[1].ToString();
+                ret[2] = reader[2].ToString();
+                ret[3] = reader[3].ToString();
+                ret[4] = reader[4].ToString();
+                ret[5] = reader[5].ToString();
+                ret[6] = reader[6].ToString();
+            }
+            Connection.Close();
+            return ret;
+        }
 
         /*-----Stock-----*/
         public void InsertIntoStock(string prod_type, string prod_name, int in_stock, string date, decimal price_unit)
@@ -216,7 +236,10 @@ namespace mock_test.classes
             Connection.Open();
             MySqlCommand cmd = new MySqlCommand(qu, Connection);
             var reader = cmd.ExecuteReader();
-            var user = reader.Read();
+            while (reader.Read())
+            {
+
+            }
             Connection.Close();
         }
     }
