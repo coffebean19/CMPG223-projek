@@ -1,2 +1,15 @@
-///-----TO DO-----///
-[ ] Something           Notes: "Bois ons moet begin iets doen"
+#---///-----TO-DO List-----///---#
+
+//Code legend:
+- x     = done
+- o     = being worked on currently
+- []    = open for work
+- N:    = Note
+
+
+
+
+//---DbConnection.cs---//
+[] Execute Reader function needs to be finished;           Notes: "Bois ons moet begin iets doen"
+[] More overloading constructers for differing cases;
+[] Overloading CRUD funcitons for the database  N: Specific functions that needs this will be added later
