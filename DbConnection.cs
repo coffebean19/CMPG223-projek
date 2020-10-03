@@ -13,6 +13,10 @@ namespace mock_test.classes
     {
         public MySqlConnection Connection;
 
+        /*Amend server address, database name, uid, password and port 
+         * to local machine or wherever database is located
+         * Extra not: this is for a MySql Database, preferably v8.0.
+         * But should be compatible with 5.7/8 */
         public DbConnection()
         {
             string server = "127.0.0.7";
@@ -181,10 +185,10 @@ namespace mock_test.classes
         }
 
         /*-----Non table specifics-----*/
-        /*Executes sql queries, any CUD commands. Read commands should
-            must be written in full code. The function for reading from
-            the database is still WIP. See TO-DO List, or the 
-            ExecuteRead(string qu) function*/
+      /*Executes sql queries, any CUD commands. Read commands should
+         *   must be written in full code. The function for reading from
+         *   the database is still WIP. See TO-DO List, or the 
+         *   ExecuteRead(string qu) function*/
         public void ExecuteQuery(string qu)
         {
             Connection.Open();
