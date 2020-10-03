@@ -19,9 +19,15 @@ the code must portable enough to use in a GUI application
 []  Overloading CRUD funcitons for the database  N: Specific functions that needs this will be added later;
 []  Updating TO-DO List;
 []  Write exception handling in all functions that have not yet;
+[o] Read functions for employee table;
+[]  Read functions for orders table;
+[]  Read functions for stocks table;
+[]  Read functions for rights table;
+[]  Read functions for transactions table;
+[]  Read functions for transactions_details table;
 
 //Database
-N: Check the db designs in process models and logic designs
+N: Check the db designs in process models and logic designs;
 
 [x] Primary keys needs to be set up;
 [x] Foreign keys needs to be set up;
