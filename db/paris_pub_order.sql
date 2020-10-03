@@ -33,7 +33,9 @@ CREATE TABLE `order` (
   `stock_id` int(11) NOT NULL,
   `cost` decimal(10,0) NOT NULL,
   PRIMARY KEY (`order_id`),
-  UNIQUE KEY `order_id_UNIQUE` (`order_id`)
+  UNIQUE KEY `order_id_UNIQUE` (`order_id`),
+  KEY `stock_id` (`stock_id`),
+  CONSTRAINT `order_ibfk_1` FOREIGN KEY (`stock_id`) REFERENCES `stock` (`stock_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -56,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-03 14:00:51
+-- Dump completed on 2020-10-03 15:15:32

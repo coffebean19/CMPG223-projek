@@ -28,7 +28,11 @@ CREATE TABLE `trans_details` (
   `transac_id` int(11) NOT NULL,
   `stock_id` int(11) NOT NULL,
   `amount_sold` int(11) NOT NULL,
-  `price_at_date` decimal(10,0) NOT NULL
+  `price_at_date` decimal(10,0) NOT NULL,
+  KEY `transac_id` (`transac_id`),
+  KEY `stock_id` (`stock_id`),
+  CONSTRAINT `trans_details_ibfk_1` FOREIGN KEY (`transac_id`) REFERENCES `transaction` (`transac_id`),
+  CONSTRAINT `trans_details_ibfk_2` FOREIGN KEY (`stock_id`) REFERENCES `stock` (`stock_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -38,6 +42,7 @@ CREATE TABLE `trans_details` (
 
 LOCK TABLES `trans_details` WRITE;
 /*!40000 ALTER TABLE `trans_details` DISABLE KEYS */;
+INSERT INTO `trans_details` VALUES (1,1,5,250);
 /*!40000 ALTER TABLE `trans_details` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-03 14:00:51
+-- Dump completed on 2020-10-03 15:15:32
