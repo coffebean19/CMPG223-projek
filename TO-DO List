@@ -18,4 +18,11 @@ the code must portable enough to use in a GUI application
 [] More overloading constructers for differing cases;
 [] Overloading CRUD funcitons for the database  N: Specific functions that needs this will be added later;
 [] Updating TO-DO List;
-[] Write exception handling in all functions that have not yer
+[] Write exception handling in all functions that have not yet;
+
+//Database
+N: Check the db designs in process models and logic designs
+
+[o] Primary keys needs to be set up;
+[]  Foreign keys needs to be set up;
+[]  Relationships between tables needs setup;
