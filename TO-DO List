@@ -23,6 +23,6 @@ the code must portable enough to use in a GUI application
 //Database
 N: Check the db designs in process models and logic designs
 
-[o] Primary keys needs to be set up;
+[x] Primary keys needs to be set up;
 []  Foreign keys needs to be set up;
 []  Relationships between tables needs setup;
