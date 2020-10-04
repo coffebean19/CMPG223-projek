@@ -11,6 +11,13 @@ namespace mock_test.classes
 {
     public class DbConnection
     {
+        /*  TO-DO List
+         *  Exception handling is needed.
+         *  Certain CRUD functions need writing.
+         *  InsertIntoStock decimal problem needs fixing.
+         *  Update Employees does nothing yet. Just a function with strings??
+         */
+
         public MySqlConnection Connection;
 
         /*Amend server address, database name, uid, password and port 
@@ -31,6 +38,11 @@ namespace mock_test.classes
             Connection = con;
         }
 
+
+        /*A function for if you need a connection to another database.
+         * This effectively means you can open several connections.
+         * Not tested with several connections, if using multiple be wary.
+         */
         public DbConnection(string server, string database, string uid, string port, string password = "")
         {
             string conStr = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";PASSWORD=" + password + "; PORT=" + port + ";";
@@ -44,13 +56,6 @@ namespace mock_test.classes
             return Connection;
         }
 
-        public void AddtoTable(string qu)
-        {
-            Connection.Open();
-            MySqlCommand cmd = new MySqlCommand(qu, ReturnConnection());
-            cmd.ExecuteNonQuery();
-            Connection.Close();
-        }
 
         /*-----Employees-----*/
         public void InsertIntoEmployees(string name, string surname, int gender, string date, string password)
@@ -117,15 +122,72 @@ namespace mock_test.classes
         }
 
         /*-----Stock-----*/
-        public void InsertIntoStock(string prod_type, string prod_name, int in_stock, string date, decimal price_unit)
+        //Needs fixing, the decimal converts the '.' in a float to a ',' e.g. 4.5 = '4,5'. This fucks the sql code and we need it fixed
+        /*public void InsertIntoStock(string prod_type, string prod_name, int in_stock, decimal price_unit)
         {
-            string qu = "INSERT INTO `paris_pub`.`stock` (`prod_type`, `prod_name`, `in_stock`, `date`, `price_unit`) VALUES ('"
-                + prod_type + "', '" 
-                + prod_name + "', '" 
-                + in_stock + "', '" 
-                + date + "', '" 
-                + price_unit + "');";
-            ExecuteQuery(qu);
+            try
+            {
+                string qu = "INSERT INTO `paris_pub`.`stock` (`prod_type`, `prod_name`, `in_stock`, `price_unit`) VALUES ('" +
+                    prod_type  +"', '" +
+                    prod_name + "', '" +
+                    in_stock + "', '" +
+                    price_unit + "');";
+                ExecuteQuery(qu);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                throw;
+            }
+        }*/
+
+        public void InsertIntoStock(string prod_type, string prod_name, int in_stock, string price_unit)
+        {
+            try
+            {
+                string qu = "INSERT INTO `paris_pub`.`stock` (`prod_type`, `prod_name`, `in_stock`, `price_unit`) VALUES ('" +
+                    prod_type + "', '" +
+                    prod_name + "', '" +
+                    in_stock + "', '" +
+                    price_unit + "');";
+                ExecuteQuery(qu);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                throw;
+            }
+        }
+
+        public void ChangeStock(int id, string prod_type, string prod_name, string in_stock, decimal price)
+        {
+            string qu = "UPDATE `paris_pub`.`stock` SET " +
+                "`prod_type` = '" + prod_type + "', " +
+                "`prod_name` = '" + prod_name + "', " +
+                "`in_stock` = '"+ in_stock + "', " +
+                "`price_unit` = '" + price + "' " +
+                "WHERE (`stock_id` = '" + id + "');";
+        }
+
+        public string[] ReadFromStock(int id)
+        {
+            string qu = ReadString("stock", id);
+            string[] ret = new string[5];
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(qu, Connection);
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ret[0] = reader[0].ToString();
+                ret[1] = reader[1].ToString();
+                ret[2] = reader[2].ToString();
+                ret[3] = reader[3].ToString();
+                ret[4] = reader[4].ToString();
+            }
+
+            return ret;
         }
 
         /*----Transaction-----*/
@@ -133,8 +195,8 @@ namespace mock_test.classes
         {
             string qu = "INSERT INTO `paris_pub`.`transaction` (`employee_id`, `total_price`, `date_of_transac`) VALUES ('"
                 + employee_id + "', '"
-                + total_price+ "', '"
-                + date+ "');";
+                + total_price + "', '"
+                + date + "');";
             ExecuteQuery(qu);
         }
 
@@ -149,6 +211,26 @@ namespace mock_test.classes
                 + stock_id + "', '"
                 + cost + "');";
             ExecuteQuery(qu);
+        }
+        public string[] ReadFromOrders(int id)
+        {
+            string[] ret = new string[7];
+            string qu = "SELECT * FROM `paris_pub`.`order` WHERE `order_id` = '" + id + "';";
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(qu, Connection);
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ret[0] = reader[0].ToString();
+                ret[1] = reader[1].ToString();
+                ret[2] = reader[2].ToString();
+                ret[3] = reader[3].ToString();
+                ret[4] = reader[4].ToString();
+                ret[5] = reader[5].ToString();
+                ret[6] = reader[6].ToString();
+            }
+
+            return ret;
         }
 
         /*----Rights----*/
@@ -241,6 +323,13 @@ namespace mock_test.classes
 
             }
             Connection.Close();
+        }
+
+        //Function made for paris_pub to return a string to read a record from a table.
+        //Will need expanding to handling seperate use cases       
+        public string ReadString(string table, int id)
+        {
+            return "SELECT * FROM `paris_pub`.`" + table + "` WHERE `" + table + "_id` = '" + id + "';";
         }
     }
 }
