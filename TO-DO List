@@ -20,12 +20,16 @@ the code must portable enough to use in a GUI application
 []  Updating TO-DO List;
 []  Write exception handling in all functions that have not yet;
 [x] Read functions for employee table;
-[o] Read functions for orders table;
-[]  Read functions for stocks table;
+[x] Read functions for orders table;
+[o] Read functions for stocks table;
 []  Read functions for rights table;
 []  Read functions for transactions table;
 []  Read functions for transactions_details table;
-
+[]  In ReadFromStocks the decimal value converts the '.' in a number to ','
+        e.g. 5.6 becomes '5,6'. This in turn leads to errors in the sql
+        query. Current fix is making it a string parameter, but keeping the
+        decimal would prevent future troubles. Needs a workaround
+      
 //Database
 N: Check the db designs in process models and logic designs;
 
