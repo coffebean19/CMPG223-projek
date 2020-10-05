@@ -423,7 +423,18 @@ namespace mock_test.classes
             }
             Connection.Close();
         }
-
+        
+        public string GetAdminId()
+        {
+            string qu = "SELECT * FROM `paris_pub`.`rights` WHERE (`admin` = '1');";
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(qu, Connection);
+            var reader = cmd.ExecuteReader();
+            reader.Read();
+            string ret = reader[0].ToString();
+            Connection.Close();
+            return ret.ToString();
+        }
         //Function made for paris_pub to return a string to read a record from a table.
         //Will need expanding to handling seperate use cases       
         public string ReadString(string table, int id)
