@@ -95,10 +95,10 @@ namespace mock_test.classes
             string qu = "DELETE FROM `paris_pub`.`employee` WHERE (`employee_id` = '" + id + "');";
             ExecuteQuery(qu);
         }
-        public void UpdateEmployees()
+        public void UpdateEmployees(int id, string col, string value)
         {
-            string qu = "UPDATE `paris_pub`.`employee` SET `password` = 'passie' WHERE (`employee_id` = '1');";
-            string equ = "UPDATE `paris_pub`.`employee` SET `surname` = 'Strobel', `gender` = '0', `date_of_birth` = '1999-03-06', `password` = '123' WHERE(`employee_id` = '2')";
+            string qu = "UPDATE `paris_pub`.`employee` SET `"+ col + "` = '" + value + "' WHERE (`employee_id` = '" + id + "');";
+            ExecuteQuery(qu);
         }
         public string[] ReadFromEmployees(int id)
         {
@@ -190,6 +190,12 @@ namespace mock_test.classes
             return ret;
         }
 
+        public void DeleteFromStock(int id)
+        {
+            string qu = "DELETE FROM `paris_pub`.`stock` WHERE (`stock_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
+
         /*----Transaction-----*/
         public void InsertIntoTransaction(int employee_id, decimal total_price, string date)
         {
@@ -199,24 +205,7 @@ namespace mock_test.classes
                 + date + "');";
             ExecuteQuery(qu);
         }
-        
-        public string[] ReadFromTransaction(int TransacId)
-        {
-            string SQLALL = "SELECT * FROM `paris_pub`.transaction WHERE `transac_id` = '" + TransacId + "';";
-            string[] transac = new string[4];
-            Connection.Open();
-            MySqlCommand cmd = new MySqlCommand(SQLALL, Connection);
-            var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                transac[0] = reader[0].ToString();
-                transac[1] = reader[1].ToString();
-                transac[2] = reader[2].ToString();
-                transac[3] = reader[3].ToString();
-            }
-            Connection.Close();
-            return transac;
-        }
+
 
         /*----Order-----*/
         public void InsertIntoOrders(string supplier, int amount, string ord_date, string arr_date, int stock_id, decimal cost)
@@ -249,6 +238,12 @@ namespace mock_test.classes
             }
 
             return ret;
+        }
+
+        public void UpdateOrder(int id, string col, string value)
+        {
+            string qu = "UPDATE `paris_pub`.`order` SET `" + col + "` = '" + value +"' WHERE (`order_id` = '" + id + "');";
+            ExecuteQuery(qu);
         }
 
         /*----Rights----*/
@@ -305,6 +300,11 @@ namespace mock_test.classes
             ExecuteQuery(qu);
         }
 
+        public void RemoveFromRights(int id)
+        {
+            string qu = "DELETE FROM `paris_pub`.`rights` WHERE (`employee_id` = '" + id + "');";
+        }
+
         /*----Transaction Details----*/
         public void InsertTransDetails(string trans_id, string stock_id, string amount_sold, string price)
         {
@@ -314,24 +314,6 @@ namespace mock_test.classes
                 + amount_sold + ", +"
                 + price +") ;";
             ExecuteQuery(qu);
-        }
-        
-        public string[] ReadFromTransactionDetails(int TransacId)
-        {
-            string SQLALL = "SELECT * FROM `paris_pub`.trans_details WHERE `transac_id` = '" + TransacId + "';";
-            string[] transD = new string[4];
-            Connection.Open();
-            MySqlCommand cmd = new MySqlCommand(SQLALL, Connection);
-            var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                transD[0] = reader[0].ToString();
-                transD[1] = reader[1].ToString();
-                transD[2] = reader[2].ToString();
-                transD[3] = reader[3].ToString();
-            }
-            Connection.Close();
-            return transD;
         }
 
         /*-----Non table specifics-----*/
