@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -206,6 +206,23 @@ namespace mock_test.classes
             ExecuteQuery(qu);
         }
 
+        public string[] ReadFromTransaction(int TransacId)
+        {
+            string SQLALL = "SELECT * FROM `paris_pub`.transaction WHERE `transac_id` = '" + TransacId + "';";
+            string[] transac = new string[4];
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(SQLALL, Connection);
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                transac[0] = reader[0].ToString();
+                transac[1] = reader[1].ToString();
+                transac[2] = reader[2].ToString();
+                transac[3] = reader[3].ToString();
+            }
+            Connection.Close();
+            return transac;
+        }
 
         /*----Order-----*/
         public void InsertIntoOrders(string supplier, int amount, string ord_date, string arr_date, int stock_id, decimal cost)
@@ -337,6 +354,25 @@ namespace mock_test.classes
                 + price +") ;";
             ExecuteQuery(qu);
         }
+
+        public string[] ReadFromTransactionDetails(int TransacId)
+        {
+            string SQLALL = "SELECT * FROM `paris_pub`.trans_details WHERE `transac_id` = '" + TransacId + "';";
+            string[] transD = new string[4];
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(SQLALL, Connection);
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                transD[0] = reader[0].ToString();
+                transD[1] = reader[1].ToString();
+                transD[2] = reader[2].ToString();
+                transD[3] = reader[3].ToString();
+            }
+            Connection.Close();
+            return transD;
+        }
+
 
         /*-----Non table specifics-----*/
         /*Executes sql queries, any CUD commands. Read commands should
