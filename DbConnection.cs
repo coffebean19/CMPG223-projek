@@ -196,34 +196,6 @@ namespace mock_test.classes
             ExecuteQuery(qu);
         }
 
-        /*----Transaction-----*/
-        public void InsertIntoTransaction(int employee_id, decimal total_price, string date)
-        {
-            string qu = "INSERT INTO `paris_pub`.`transaction` (`employee_id`, `total_price`, `date_of_transac`) VALUES ('"
-                + employee_id + "', '"
-                + total_price + "', '"
-                + date + "');";
-            ExecuteQuery(qu);
-        }
-
-        public string[] ReadFromTransaction(int TransacId)
-        {
-            string SQLALL = "SELECT * FROM `paris_pub`.transaction WHERE `transac_id` = '" + TransacId + "';";
-            string[] transac = new string[4];
-            Connection.Open();
-            MySqlCommand cmd = new MySqlCommand(SQLALL, Connection);
-            var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                transac[0] = reader[0].ToString();
-                transac[1] = reader[1].ToString();
-                transac[2] = reader[2].ToString();
-                transac[3] = reader[3].ToString();
-            }
-            Connection.Close();
-            return transac;
-        }
-
         /*----Order-----*/
         public void InsertIntoOrders(string supplier, int amount, string ord_date, string arr_date, int stock_id, decimal cost)
         {
@@ -344,8 +316,47 @@ namespace mock_test.classes
             return ret;
         }
 
+        /*----Transaction-----*/
+        public void InsertIntoTransaction(int employee_id, decimal total_price, string date)
+        {
+            string qu = "INSERT INTO `paris_pub`.`transaction` (`employee_id`, `total_price`, `date_of_transac`) VALUES ('"
+                + employee_id + "', '"
+                + total_price + "', '"
+                + date + "');";
+            ExecuteQuery(qu);
+        }
+
+        public string[] ReadFromTransaction(int TransacId)
+        {
+            string SQLALL = "SELECT * FROM `paris_pub`.transaction WHERE `transac_id` = '" + TransacId + "';";
+            string[] transac = new string[4];
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(SQLALL, Connection);
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                transac[0] = reader[0].ToString();
+                transac[1] = reader[1].ToString();
+                transac[2] = reader[2].ToString();
+                transac[3] = reader[3].ToString();
+            }
+            Connection.Close();
+            return transac;
+        }
+
+        public void DeleteFromTransaction(int id)
+        {
+            string qu = "DELETE FROM `paris_pub`.`transaction` WHERE (`transac_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
+
+        public void UpdateTransaction(int id, string col, string value)
+        {
+            string qu = "UPDATE `paris_pub`.`transaction` SET `" + col + "` = '" + value + "' WHERE (`transac_id` = '" + id + "');";
+        }
+
         /*----Transaction Details----*/
-        public void InsertTransDetails(string trans_id, string stock_id, string amount_sold, string price)
+        public void InsertTransactionDetails(string trans_id, string stock_id, string amount_sold, string price)
         {
             string qu = "INSERT INTO `paris_pub`.`trans_details` (`transac_id`, `stock_id`, `amount_sold`, `price_at_date` ) VALUES ("
                 + trans_id + ", "
@@ -371,6 +382,18 @@ namespace mock_test.classes
             }
             Connection.Close();
             return transD;
+        }
+
+        public void DeleteFromTransactionDetails(int id)
+        {
+            string qu = "DELETE FROM `paris_pub`.`trans_details` WHERE (`trans_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
+
+        public void ChangeTransactionDetails(int id, string col, string value)
+        {
+            string qu = "UPDATE `paris_pub`.`trans_details` SET `"+ col + "` = '" + value + "' WHERE (`transac_id` = '" + id + "');";
+            ExecuteQuery(qu);
         }
 
 
