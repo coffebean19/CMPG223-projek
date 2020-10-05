@@ -6,7 +6,16 @@
 - []    = open for work;
 - N:    = Note;
 - ;     = End of item;
+- !     = not as important;
+- $     = very important;
 
+
+//---GUI---//
+
+Check planning and communicate if needed, as some things that
+needs to be done might be ambigious or not clear enough
+
+[]  Admin site;
 
 
 //---DbConnection.cs---//
@@ -14,25 +23,13 @@
 It is recommended to use a console app to test code, as
 the code must portable enough to use in a GUI application
 
-[]  Execute Reader function needs to be finished;      
-[]  More overloading constructers for differing cases;
-[]  Overloading CRUD funcitons for the database  N: Specific functions that needs this will be added later;
-[]  Updating TO-DO List;
+[]!  Execute Reader function needs to be finished;      
+[]!  More overloading constructers for differing cases;
 []  Write exception handling in all functions that have not yet;
-[x] Read functions for employee table;
-[x] Read functions for orders table;
-[x] Read functions for stocks table;
-[x] Read functions for rights table;
-[x] Read functions for transactions table;
-[x] Read functions for transactions_details table;
-[]  In ReadFromStocks the decimal value converts the '.' in a number to ','
+[]!  In ReadFromStocks the decimal value converts the '.' in a number to ','
         e.g. 5.6 becomes '5,6'. This in turn leads to errors in the sql
         query. Current fix is making it a string parameter, but keeping the
         decimal would prevent future troubles. Needs a workaround
       
 //Database
 N: Check the db designs in process models and logic designs;
-
-[x] Primary keys needs to be set up;
-[x] Foreign keys needs to be set up;
-[x] Relationships between tables needs setup;
