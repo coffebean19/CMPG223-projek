@@ -17,8 +17,9 @@ needs to be done might be ambigious or not clear enough
 
 [o]  Admin site;
 [o]  Employee form;
+[o] sales gui for empoyees.;
 
-[x]  PDF reports; N: Dankie Drikus
+[x]  PDF reports; N: Dankie Drikus;
 
 //---DbConnection.cs---//
 
@@ -32,6 +33,6 @@ the code must portable enough to use in a GUI application
         e.g. 5.6 becomes '5,6'. This in turn leads to errors in the sql
         query. Current fix is making it a string parameter, but keeping the
         decimal would prevent future troubles. Needs a workaround
-[o] sales gui for empoyees.      
+     
 //Database
 N: Check the db designs in process models and logic designs;
