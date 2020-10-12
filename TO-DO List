@@ -15,8 +15,10 @@
 Check planning and communicate if needed, as some things that
 needs to be done might be ambigious or not clear enough
 
-[]  Admin site;
+[o]  Admin site;
+[o]  Employee form;
 
+[x]  PDF reports; N: Dankie Drikus
 
 //---DbConnection.cs---//
 
