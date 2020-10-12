@@ -1,4 +1,5 @@
 ﻿using cmpg223_final_project.classes;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -54,25 +55,50 @@ namespace cmpg223_final_project
         private void btn_Login_Click(object sender, EventArgs e)
         {
             DbConnection db = new DbConnection();
-            string[] admin = db.ReadFromEmployees(int.Parse(db.GetAdminId()));
+            string password = txb_PwdAdmin.Text;
+            string id = "";
+            db.Connection.Open();
+            try
+            {
+                string qu = "SELECT * FROM `paris_pub`.`employee` WHERE (`password` = '" + password + "');";
 
-            if(txb_float.Text != "" && txb_PwdAdmin.Text == admin[5])
-            {
-                sfloat = Convert.ToInt32(txb_float.Text);
-                sales sales = new sales();
-                sales.Show();
-                this.Hide();
+                MySqlCommand cmd = new MySqlCommand(qu, db.Connection);
+                var reader = cmd.ExecuteReader();
+                reader.Read();
+                id = reader[0].ToString();
+
             }
-            else if(txb_float.Text == "")
+            catch (Exception)
             {
-                lblMessage.Text = "Please fill in the float";
-                lblMessage.Visible = true;
+                MessageBox.Show("Password is invalid");
             }
-            else if(txb_PwdAdmin.Text != "admin")
+            db.Connection.Close();
+
+            string[] admin = db.ReadFromRights(id);
+            if (admin[5] == "1")
             {
-                lblMessage.Text = "Admin validation required!";
-                lblMessage.Visible = true;
+                if (txb_float.Text != "" && txb_PwdAdmin.Text == password)
+                {
+                    sales sales = new sales();
+                    sales.Show();
+                    this.Hide();
+                }
+                else if (txb_float.Text == "")
+                {
+                    lblMessage.Text = "Please fill in the float";
+                    lblMessage.Visible = true;
+                }
+                else if (txb_PwdAdmin.Text != "admin")
+                {
+                    lblMessage.Text = "Admin validation required!";
+                    lblMessage.Visible = true;
+                }
             }
+            else
+            {
+                MessageBox.Show("Not an admin");
+            }
+
         }
 
         private void txb_float_TextChanged(object sender, EventArgs e)

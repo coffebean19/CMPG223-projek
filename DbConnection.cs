@@ -296,6 +296,7 @@ namespace cmpg223_final_project.classes
         public void RemoveFromRights(int id)
         {
             string qu = "DELETE FROM `paris_pub`.`rights` WHERE (`employee_id` = '" + id + "');";
+            ExecuteQuery(qu);
         }
 
         public string[] ReadFromRights(int id)
@@ -312,6 +313,26 @@ namespace cmpg223_final_project.classes
             ret[3] = reader[3].ToString();
             ret[4] = reader[4].ToString();
             ret[5] = reader[5].ToString();
+            Connection.Close();
+
+            return ret;
+        }
+
+        public string[] ReadFromRights(string id)
+        {
+            string[] ret = new string[6];
+            string qu = "SELECT * FROM `paris_pub`.`rights` WHERE (`employee_id` = '" + id + "');";
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(qu, Connection);
+            var reader = cmd.ExecuteReader();
+            reader.Read();
+            ret[0] = reader[0].ToString();
+            ret[1] = reader[1].ToString();
+            ret[2] = reader[2].ToString();
+            ret[3] = reader[3].ToString();
+            ret[4] = reader[4].ToString();
+            ret[5] = reader[5].ToString();
+            Connection.Close();
 
             return ret;
         }
