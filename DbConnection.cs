@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,6 +58,9 @@ namespace cmpg223_final_project.classes
 
 
         /*-----Employees-----*/
+
+        //Create an employee, basically.
+        //Or for creatain
         public void InsertIntoEmployees(string name, string surname, int gender, string date, string password)
         {
             DateTime dDate;
@@ -76,6 +79,8 @@ namespace cmpg223_final_project.classes
                 }
             }
         }
+
+        //Delete from employees
         public void DeleteFromEmployees(string id)
         {
             string qu = "DELETE FROM `paris_pub`.`employee` WHERE (`employee_id` = '" + id + "');";
@@ -86,6 +91,8 @@ namespace cmpg223_final_project.classes
             string qu = "DELETE FROM `paris_pub`.`employee` WHERE (`employee_id` = '" + id + "');";
             ExecuteQuery(qu);
         }
+
+        //It's where you update a view details in the employees
         public void UpdateEmployees(int id, string col, string value)
         {
             string qu = "UPDATE `paris_pub`.`employee` SET `" + col + "` = '" + value + "' WHERE (`employee_id` = '" + id + "');";
@@ -116,6 +123,8 @@ namespace cmpg223_final_project.classes
             Connection.Close();
             return ret;
         }
+
+        //Get.. last employee!!
         public string GetLastEmployeeId()
         {
             string qu = "SELECT * FROM `paris_pub`.`employee` ORDER BY `employee_id` DESC LIMIT 1;";
@@ -128,25 +137,8 @@ namespace cmpg223_final_project.classes
             return id;
         }
         /*-----Stock-----*/
-        //Needs fixing, the decimal converts the '.' in a float to a ',' e.g. 4.5 = '4,5'. This fucks the sql code and we need it fixed
-        /*public void InsertIntoStock(string prod_type, string prod_name, int in_stock, decimal price_unit)
-        {
-            try
-            {
-                string qu = "INSERT INTO `paris_pub`.`stock` (`prod_type`, `prod_name`, `in_stock`, `price_unit`) VALUES ('" +
-                    prod_type  +"', '" +
-                    prod_name + "', '" +
-                    in_stock + "', '" +
-                    price_unit + "');";
-                ExecuteQuery(qu);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }*/
 
+        //Creates
         public void InsertIntoStock(string prod_type, string prod_name, int in_stock, string price_unit)
         {
             try
@@ -166,16 +158,7 @@ namespace cmpg223_final_project.classes
             }
         }
 
-        public void ChangeStock(int id, string prod_type, string prod_name, string in_stock, decimal price)
-        {
-            string qu = "UPDATE `paris_pub`.`stock` SET " +
-                "`prod_type` = '" + prod_type + "', " +
-                "`prod_name` = '" + prod_name + "', " +
-                "`in_stock` = '" + in_stock + "', " +
-                "`price_unit` = '" + price + "' " +
-                "WHERE (`stock_id` = '" + id + "');";
-        }
-
+        //Reads
         public string[] ReadFromStock(int id)
         {
             string qu = ReadString("stock", id);
@@ -195,6 +178,26 @@ namespace cmpg223_final_project.classes
             return ret;
         }
 
+        //Updates
+        public void ChangeStock(int id, string prod_type, string prod_name, string in_stock, decimal price)
+        {
+            string qu = "UPDATE `paris_pub`.`stock` SET " +
+                "`prod_type` = '" + prod_type + "', " +
+                "`prod_name` = '" + prod_name + "', " +
+                "`in_stock` = '" + in_stock + "', " +
+                "`price_unit` = '" + price + "' " +
+                "WHERE (`stock_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
+
+
+        public void ChangeStock(string prod_name, int in_stock)
+        {
+            string qu = "UPDATE `paris_pub`.`stock` SET `in_stock` = '" + in_stock + "'WHERE (`stock_id` = '" + id + "';"; ; ";
+            ExecuteQuery(qu);
+        }
+
+        //Delete
         public void DeleteFromStock(int id)
         {
             string qu = "DELETE FROM `paris_pub`.`stock` WHERE (`stock_id` = '" + id + "');";
