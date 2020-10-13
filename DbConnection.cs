@@ -193,7 +193,7 @@ namespace cmpg223_final_project.classes
 
         public void ChangeStock(string prod_name, int in_stock)
         {
-            string qu = "UPDATE `paris_pub`.`stock` SET `in_stock` = '" + in_stock + "'WHERE (`stock_id` = '" + id + "';"; ; ";
+            string qu = "UPDATE `paris_pub`.`stock` SET `in_stock` = '" + in_stock + "'WHERE (`stock_id` = '" + prod_name + "');";
             ExecuteQuery(qu);
         }
 
