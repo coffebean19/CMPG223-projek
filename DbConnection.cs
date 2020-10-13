@@ -26,7 +26,7 @@ namespace cmpg223_final_project.classes
          * But should be compatible with 5.7/8 */
         public DbConnection()
         {
-            string server = "127.0.0.7";
+            string server = "127.0.0.1";
             string database = "paris_pub";
             string uid = "root";
             string password = "special";
@@ -74,16 +74,7 @@ namespace cmpg223_final_project.classes
                     + "', '" + password + "');";
                     ExecuteQuery(qu);
                 }
-                else
-                {
-                    Console.WriteLine("Gender does not exist.");
-                }
             }
-            else
-            {
-                Console.WriteLine("DateTime is wrong");
-            }
-            
         }
         public void DeleteFromEmployees(string id)
         {
@@ -97,7 +88,12 @@ namespace cmpg223_final_project.classes
         }
         public void UpdateEmployees(int id, string col, string value)
         {
-            string qu = "UPDATE `paris_pub`.`employee` SET `"+ col + "` = '" + value + "' WHERE (`employee_id` = '" + id + "');";
+            string qu = "UPDATE `paris_pub`.`employee` SET `" + col + "` = '" + value + "' WHERE (`employee_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
+        public void UpdateEmployees(string id, string col, string value)
+        {
+            string qu = "UPDATE `paris_pub`.`employee` SET `" + col + "` = '" + value + "' WHERE (`employee_id` = '" + id + "');";
             ExecuteQuery(qu);
         }
         public string[] ReadFromEmployees(int id)
@@ -120,7 +116,17 @@ namespace cmpg223_final_project.classes
             Connection.Close();
             return ret;
         }
-
+        public string GetLastEmployeeId()
+        {
+            string qu = "SELECT * FROM `paris_pub`.`employee` ORDER BY `employee_id` DESC LIMIT 1;";
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(qu, Connection);
+            var reader = cmd.ExecuteReader();
+            reader.Read();
+            string id = reader[0].ToString();
+            Connection.Close();
+            return id;
+        }
         /*-----Stock-----*/
         //Needs fixing, the decimal converts the '.' in a float to a ',' e.g. 4.5 = '4,5'. This fucks the sql code and we need it fixed
         /*public void InsertIntoStock(string prod_type, string prod_name, int in_stock, decimal price_unit)
@@ -137,7 +143,6 @@ namespace cmpg223_final_project.classes
             catch (Exception e)
             {
                 Console.WriteLine(e);
-
                 throw;
             }
         }*/
@@ -166,7 +171,7 @@ namespace cmpg223_final_project.classes
             string qu = "UPDATE `paris_pub`.`stock` SET " +
                 "`prod_type` = '" + prod_type + "', " +
                 "`prod_name` = '" + prod_name + "', " +
-                "`in_stock` = '"+ in_stock + "', " +
+                "`in_stock` = '" + in_stock + "', " +
                 "`price_unit` = '" + price + "' " +
                 "WHERE (`stock_id` = '" + id + "');";
         }
@@ -201,7 +206,7 @@ namespace cmpg223_final_project.classes
         {
             string qu = "INSERT INTO `paris_pub`.`order` (`supplier`, `amount`, `order_date`, `arrival_date`, `stock_id`, `cost`) VALUES('"
                 + supplier + "', '"
-                + amount + "', '" 
+                + amount + "', '"
                 + ord_date + "', '"
                 + arr_date + "', '"
                 + stock_id + "', '"
@@ -230,7 +235,7 @@ namespace cmpg223_final_project.classes
         }
         public void UpdateOrder(int id, string col, string value)
         {
-            string qu = "UPDATE `paris_pub`.`order` SET `" + col + "` = '" + value +"' WHERE (`order_id` = '" + id + "');";
+            string qu = "UPDATE `paris_pub`.`order` SET `" + col + "` = '" + value + "' WHERE (`order_id` = '" + id + "');";
             ExecuteQuery(qu);
         }
         public void RemoveFromOrders(int id)
@@ -240,60 +245,36 @@ namespace cmpg223_final_project.classes
         }
 
         /*----Rights----*/
-        public void InsertIntoRights(int employee_id, short employees, short stocks, short orders, short trans, short admin)
+        public void InsertIntoRights(int employee_id, short admin)
         {
             string qu = "SELECT * FROM paris_pub.employee where `employee_id` = '" + employee_id + "';";
 
-            try
-            {
-                Connection.Open();
-                MySqlCommand cmd = new MySqlCommand(qu, Connection);
-                var reader = cmd.ExecuteReader();
-                var user = reader.Read();
-                Connection.Close();
-                Console.WriteLine(user);
-            }
-            catch (MySql.Data.MySqlClient.MySqlException e)
-            {
-                Console.WriteLine("Employee does not exist");
-                Console.Write("Show complete error?(Y/N): ");
-                string answer = "";
-                do
-                {
-                    answer = Console.ReadLine().ToLower();
-                    if (answer == "y")
-                    {
-                        Console.WriteLine(e);
-                    }
-                    else if(answer != "n")
-                    {
-                        Console.Write("Please Enter 'Y' or 'N': ");
-                    }
-
-                } while (answer != "y" && answer != "n");
-
-                throw;
-            }
-
-
-
-            qu = "INSERT INTO `paris_pub`.`rights` (`employee_id`, `employees`, `stocks`, `orders`, `transactions`, `admin`) VALUES ('"
-                + employee_id + "', b'" 
-                + employees + "', b'"
-                + stocks + "', b'"
-                + orders + "', b'"
-                + trans + "', b'"
+            qu = "INSERT INTO `paris_pub`.`rights` (`employee_id`, `admin`) VALUES ('"
+                + employee_id + "', b'"
                 + admin + "');";
             ExecuteQuery(qu);
         }
-
-        public void ChangeRights(string column, short right, string user)
+        public void InsertIntoRights(string employee_id, short admin)
         {
-            string qu = "UPDATE `paris_pub`.`rights` SET `" + column + "` = '" + right + "' WHERE (`employee_id` = '" + user + "');";
+            string qu = "SELECT * FROM paris_pub.employee where `employee_id` = '" + employee_id + "';";
+
+            qu = "INSERT INTO `paris_pub`.`rights` (`employee_id`, `admin`) VALUES ('"
+                + employee_id + "', b'"
+                + admin + "');";
+            ExecuteQuery(qu);
+        }
+        public void ChangeRights(string id, short admin)
+        {
+            string qu = "UPDATE `paris_pub`.`rights` SET `admin` = b'" + admin + "' WHERE (`employee_id` = '" + id + "');";
             ExecuteQuery(qu);
         }
 
         public void RemoveFromRights(int id)
+        {
+            string qu = "DELETE FROM `paris_pub`.`rights` WHERE (`employee_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
+        public void RemoveFromRights(string id)
         {
             string qu = "DELETE FROM `paris_pub`.`rights` WHERE (`employee_id` = '" + id + "');";
             ExecuteQuery(qu);
@@ -309,10 +290,6 @@ namespace cmpg223_final_project.classes
             reader.Read();
             ret[0] = reader[0].ToString();
             ret[1] = reader[1].ToString();
-            ret[2] = reader[2].ToString();
-            ret[3] = reader[3].ToString();
-            ret[4] = reader[4].ToString();
-            ret[5] = reader[5].ToString();
             Connection.Close();
 
             return ret;
@@ -328,10 +305,6 @@ namespace cmpg223_final_project.classes
             reader.Read();
             ret[0] = reader[0].ToString();
             ret[1] = reader[1].ToString();
-            ret[2] = reader[2].ToString();
-            ret[3] = reader[3].ToString();
-            ret[4] = reader[4].ToString();
-            ret[5] = reader[5].ToString();
             Connection.Close();
 
             return ret;
@@ -383,7 +356,7 @@ namespace cmpg223_final_project.classes
                 + trans_id + ", "
                 + stock_id + ", "
                 + amount_sold + ", +"
-                + price +") ;";
+                + price + ") ;";
             ExecuteQuery(qu);
         }
 
@@ -413,13 +386,106 @@ namespace cmpg223_final_project.classes
 
         public void ChangeTransactionDetails(int id, string col, string value)
         {
-            string qu = "UPDATE `paris_pub`.`trans_details` SET `"+ col + "` = '" + value + "' WHERE (`transac_id` = '" + id + "');";
+            string qu = "UPDATE `paris_pub`.`trans_details` SET `" + col + "` = '" + value + "' WHERE (`transac_id` = '" + id + "');";
             ExecuteQuery(qu);
         }
 
+        /*----Specials----*/
+        public void CreateSpecial(int stock_id, int quantity, int price, string pic)
+        {
+            string qu = "INSERT INTO `paris_pub`.`specials` (`stock_id`, `quantity`, `prys`, `picture`) VALUES ('" +
+                 stock_id + "','" +
+                 quantity + "','" +
+                 price + "','" +
+                 pic + "');";
+            ExecuteQuery(qu);
+        }
+        public void CreateSpecial(string stock_id, string quantity, string price, string pic)
+        {
+            string qu = "INSERT INTO `paris_pub`.`specials` (`stock_id`, `quantity`, `prys`, `picture`) VALUES ('" +
+                 stock_id + "','" +
+                 quantity + "','" +
+                 price + "','" +
+                 pic + "');";
+            ExecuteQuery(qu);
+        }
 
+        public void CreateSpecial(int stock_id, int quantity, int price)
+        {
+            string qu = "INSERT INTO `paris_pub`.`specials` (`stock_id`, `quantity`, `prys`, `picture`) VALUES ('" +
+                 stock_id + "','" +
+                 quantity + "','" +
+                 price + "');";
+            ExecuteQuery(qu);
+        }
+
+        public void CreateSpecial(string stock_id, string quantity, string price)
+        {
+            string qu = "INSERT INTO `paris_pub`.`specials` (`stock_id`, `quantity`, `prys`, `picture`) VALUES ('" +
+                 stock_id + "','" +
+                 quantity + "','" +
+                 price + "');";
+            ExecuteQuery(qu);
+        }
+
+        public string[] ReadSpecial(int id)
+        {
+            string[] ret = new string[5];
+            string qu = "SELECT * FROM `paris_pub`.`specials` WHERE (`special_id` = '" + id + "');";
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(qu, Connection);
+            var reader = cmd.ExecuteReader();
+            reader.Read();
+            ret[0] = reader[0].ToString();
+            ret[1] = reader[1].ToString();
+            ret[2] = reader[2].ToString();
+            ret[3] = reader[3].ToString();
+            ret[4] = reader[4].ToString();
+
+            return ret;
+        }
+
+        public string[] ReadSpecial(string id)
+        {
+            string[] ret = new string[5];
+            string qu = "SELECT * FROM `paris_pub`.`specials` WHERE (`special_id` = '" + id + "');";
+            Connection.Open();
+            MySqlCommand cmd = new MySqlCommand(qu, Connection);
+            var reader = cmd.ExecuteReader();
+            reader.Read();
+            ret[0] = reader[0].ToString();
+            ret[1] = reader[1].ToString();
+            ret[2] = reader[2].ToString();
+            ret[3] = reader[3].ToString();
+            ret[4] = reader[4].ToString();
+            Connection.Close();
+
+            return ret;
+        }
+
+        public void UpdateSpecial(int id, string col, string value)
+        {
+            string qu = "UPDATE `paris_pub`.`specials` SET `" + col + "` = '" + value + "' WHERE (`special_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
+        public void UpdateSpecial(string id, string col, string value)
+        {
+            string qu = "UPDATE `paris_pub`.`specials` SET `" + col + "` = '" + value + "' WHERE (`special_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
+
+        public void DeleteSpecial(int id)
+        {
+            string qu = "DELETE FROM `paris_pub`.`specials` WHERE (`special_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
+        public void DeleteSpecial(string id)
+        {
+            string qu = "DELETE FROM `paris_pub`.`specials` WHERE (`special_id` = '" + id + "');";
+            ExecuteQuery(qu);
+        }
         /*-----Non table specifics-----*/
-        /*Executes sql queries, any CUD commands. Read commands should
+        /*Executes sql queries, any CUD commands. Read commands
          *   must be written in full code. The function for reading from
          *   the database is still WIP. See TO-DO List, or the 
          *   ExecuteRead(string qu) function*/
